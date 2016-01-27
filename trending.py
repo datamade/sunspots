@@ -5,7 +5,7 @@ import datetime
 
 SMOOTHER = 20
 WINDOW = 8
-GROWTH_THRESHOLD = 0.03
+GROWTH_THRESHOLD = 0.02
 
 def trend(counts) :
     X, Y = zip(*counts)
@@ -39,11 +39,11 @@ normalized_page_counts = collections.defaultdict(dict)
 
 for date, page, count in pages.rows :
     page_counts[page][date] = count
-    normalized_page_counts[page][date] = (count + SMOOTHER)/totals[date]
+    normalized_page_counts[page][date] = (count + SMOOTHER)/(totals[date] + SMOOTHER)
 
 for counts in normalized_page_counts.values() :
     for date in totals.keys() - counts.keys() :
-        counts[date] = SMOOTHER/totals[date]
+        counts[date] = SMOOTHER/(totals[date] + SMOOTHER)
 
 for page, counts in normalized_page_counts.items() :
     b0, b1 = trend(counts.items())
